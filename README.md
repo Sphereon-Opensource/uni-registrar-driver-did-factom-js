@@ -1,4 +1,4 @@
-![DIF Logo](https://assets.website-files.com/5bca6108bae718b9ad49a5f9/5c4820477febe49184787777_Factom-Protocol_Logo-p-500.png)
+![Factom Protocol Logo](https://assets.website-files.com/5bca6108bae718b9ad49a5f9/5c4820477febe49184787777_Factom-Protocol_Logo-p-500.png)
 
 # Universal Registrar Driver: factom
 
@@ -15,7 +15,18 @@ docker build -f ./docker/Dockerfile . -t sphereon/uni-registrar-driver-did-facto
 docker run -p 9080:9080 sphereon/uni-registrar-driver-did-factom
 curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/json"
 ```
-
+## Required option parameters:
+An example call with the option parameters can be seen below:
+```shell script
+curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/json" -d \
+'{ "options": { \
+    "publicKeyBase58": "6hUdTYK8pp3h1EwwJ4j8afsHHgJf8qDvdLrKbHPJkw6x", \
+    "extIds": ["test", "external", "ids"] \
+}'
+```
+The options are:
+* `publicKeyBase58` - **REQUIRED**: the public key to be associated with the DID
+* `extIds` - **OPTIONAL**: the unique external ids for the chain entry forming the basis of the DID. If none are provided, `[SHA256(publicKey)]` is used.
 ## Build and Run (NodeJS)
 
 ```
