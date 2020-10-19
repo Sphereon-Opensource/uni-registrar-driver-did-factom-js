@@ -1,9 +1,9 @@
-# Dockerfile for exampleorg/uni-registrar-driver-did-factom
+# Dockerfile for sphereon/uni-registrar-driver-did-nodejs-factom
 
 FROM node:10
 MAINTAINER Scott Malley <smalley@sphereon.com>
 
-# build uni-registrar-driver-did-factom
+# build uni-registrar-driver-did-nodejs-factom
 
 WORKDIR /usr/src/app
 COPY package.json ./

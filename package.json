@@ -1,5 +1,5 @@
 {
-  "name": "uni-registrar-driver-did-factom",
+  "name": "uni-registrar-driver-did-nodejs-factom",
   "version": "1.0.0",
   "description": "Factom Universal Registrar Driver",
   "main": "index.js",
