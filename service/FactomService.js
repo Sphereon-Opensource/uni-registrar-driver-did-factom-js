@@ -11,21 +11,13 @@ const identityClient = new FactomIdentityManager({
     factomd: {
         host: process.env.FACTOMD_HOST,
         port: process.env.FACTOMD_PORT,
-    },
-    walletd: {
-        host: process.env.FACTOM_WALLETD_HOST,
-        port: process.env.FACTOM_WALLETD_PORT,
-    },
+    }
 });
 
 const factomClient = new FactomCli({
     factomd: {
         host: process.env.FACTOMD_HOST,
         port: process.env.FACTOMD_PORT,
-    },
-    walletd: {
-        host: process.env.FACTOM_WALLETD_HOST,
-        port: process.env.FACTOM_WALLETD_PORT,
     }
 });
 
