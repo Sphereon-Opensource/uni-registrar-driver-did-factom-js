@@ -1,8 +1,8 @@
-![DIF Logo](https://raw.githubusercontent.com/decentralized-identity/universal-registrar/master/docs/logo-dif.png)
+![Factom Protocol Logo](https://assets.website-files.com/5bca6108bae718b9ad49a5f9/5c4820477febe49184787777_Factom-Protocol_Logo-p-500.png)
 
-# Universal Registrar Driver: example
+# Universal Registrar Driver (NodeJS): factom
 
-This is an example [Universal Registrar](https://github.com/decentralized-identity/universal-registrar/) driver for fictional **did:example** identifiers.
+This is a [Universal Registrar](https://github.com/decentralized-identity/universal-registrar/) driver for **did:factom** identifiers.
 
 ## Specifications
 
@@ -11,11 +11,22 @@ This is an example [Universal Registrar](https://github.com/decentralized-identi
 ## Build and Run (Docker)
 
 ```
-docker build -f ./docker/Dockerfile . -t exampleorg/uni-registrar-driver-did-example
-docker run -p 9080:9080 exampleorg/uni-registrar-driver-did-example
+docker build -f ./docker/Dockerfile . -t sphereon/uni-registrar-driver-did-nodejs-factom
+docker run -p 9080:9080 sphereon/uni-registrar-driver-did-nodejs-factom
 curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/json"
 ```
-
+## Required option parameters:
+An example call with the option parameters can be seen below:
+```shell script
+curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/json" -d \
+'{ "options": { \
+    "publicKeyBase58": "6hUdTYK8pp3h1EwwJ4j8afsHHgJf8qDvdLrKbHPJkw6x", \
+    "extIds": ["test", "external", "ids"] \
+}'
+```
+The options are:
+* `publicKeyBase58` - **REQUIRED**: the public key to be associated with the DID
+* `extIds` - **OPTIONAL**: the unique external ids for the chain entry forming the basis of the DID. If none are provided, `[SHA256(publicKey)]` is used.
 ## Build and Run (NodeJS)
 
 ```
@@ -26,10 +37,10 @@ npm start
 
 The driver recognizes the following environment variables:
 
-### `uniregistrar_driver_did_example_exampleSetting`
+### `uniregistrar_driver_did_factom_exampleSetting`
 
  * An example setting for the driver.
- * Default value: (empty string)
+ * DidController value: (empty string)
 
 ## Driver Metadata
 
