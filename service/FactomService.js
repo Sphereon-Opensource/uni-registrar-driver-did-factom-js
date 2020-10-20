@@ -50,14 +50,14 @@ exports.deactivate = function (body) {
  **/
 exports.register = function (body) {
     return new Promise(function (resolve, reject) {
-        const { jobId: txId, options } = body;
-        if (txId) {
-            return _getEntryInfo(txId)
-                .then(({ status, chainId }) => {
+        const { jobId: entryHash, options } = body;
+        if (entryHash) {
+            return _getChainId(entryHash)
+                .then(async chainId => {
                     resolve({
-                        jobId: txId,
+                        jobId: entryHash,
                         didState: {
-                            state: status,
+                            state: await _getEntryStatus(entryHash, chainId),
                             identifier: `did:factom:${chainId}`,
                         }
                     });
@@ -86,10 +86,10 @@ exports.register = function (body) {
             [keyToPublicIdentityKey(base58.decode(publicKeyBase58))],
             process.env.ES_ADDRESS)
             .then(async result => resolve({
-                jobId: result.txId,
+                jobId: result.entryHash,
                 didState: {
                     identifier: `did:factom:${result.chainId}`,
-                    state: await _getEntryInfo(result.txId).then(info => info.status),
+                    state: await _getEntryStatus(result.entryHash, result.chainId),
                 }
             }))
             .catch(err => {
@@ -115,12 +115,9 @@ exports.update = function (body) {
     });
 }
 
-const _getEntryInfo = txId => {
-    return factomClient.factomdApi('entry-ack', { txid: txId })
-        .then(async entryAckResponse => ({
-            status: didStatusFromEntryAck(entryAckResponse),
-            chainId: await _getChainId(entryAckResponse.entryhash)
-        }));
+const _getEntryStatus = (entryHash, chainId) => {
+    return factomClient.factomdApi('ack', { hash: entryHash, chainid: chainId})
+        .then(entryAckResponse => didStatusFromEntryAck(entryAckResponse));
 }
 
 const _getChainId = entryHash => {
