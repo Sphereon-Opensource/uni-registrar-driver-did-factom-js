@@ -29,10 +29,11 @@ exports.deactivate = function (body) {
 exports.register = function (body) {
     return new Promise(function (resolve, reject) {
         const { jobId: entryHash, options } = body;
-        const network = options.network || Networks.MAIN;
-        if (network !== Networks.MAIN || network !== Networks.TEST) {
-            reject(new InvalidNetworkParameterError(
-                "Unsupported network specified! Must be test or main"));
+        const network = options.network || Networks.MAINNET;
+        if (network !== Networks.MAINNET && network !== Networks.TESTNET) {
+            reject(throw new InvalidNetworkParameterError(
+                `Unsupported network specified! Must be test or main. Received: ${network}`)
+            );
             return;
         }
         const identityClient = FactomCliFactory.getFactomClient(network);
@@ -114,9 +115,10 @@ const _getChainId = (network, entryHash) => {
 }
 
 const _didFromChainId = (network, chainId) => {
-    return network === Networks.TEST ? `did:factom:testnet:${chainId}` : `did:factom:${chainId}`;
+    return network === Networks.TESTNET ? `did:factom:testnet:${chainId}` : `did:factom:${chainId}`;
 }
 
 const _getEsAddress = network => {
-    return network === Networks.TEST ? process.env.ES_TESTNET_ADDRESS : process.env.ES_ADDRESS;
+    return network === Networks.TESTNET ?
+        process.env.TESTNET_ES_ADDRESS : process.env.MAINNET_ES_ADDRESS;
 }
