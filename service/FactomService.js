@@ -36,7 +36,7 @@ exports.register = function (body) {
             );
             return;
         }
-        const identityClient = FactomCliFactory.getFactomClient(network);
+        const identityClient = FactomCliFactory.getFactomIdentityClient(network);
 
         if (entryHash) {
             return _getChainId(network, entryHash)
