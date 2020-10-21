@@ -1,25 +1,11 @@
 'use strict';
-const { keyToPublicIdentityKey, FactomIdentityManager } = require('factom-identity-lib').app;
-const { FactomCli } = require('factom');
+const { keyToPublicIdentityKey } = require('factom-identity-lib').app;
 const base58 = require('bs58');
 const crypto = require('crypto');
 const { validatePublicKey } = require('../utils/keyUtils');
 const { didStatusFromEntryAck } = require('../utils/factomUtils');
-const { IdentityAlreadyExistsError } = require('./errors');
-
-const identityClient = new FactomIdentityManager({
-    factomd: {
-        host: process.env.FACTOMD_HOST,
-        port: process.env.FACTOMD_PORT,
-    }
-});
-
-const factomClient = new FactomCli({
-    factomd: {
-        host: process.env.FACTOMD_HOST,
-        port: process.env.FACTOMD_PORT,
-    }
-});
+const { IdentityAlreadyExistsError, InvalidNetworkParameterError } = require('./errors');
+const { Networks, FactomCliFactory } = require('./FactomCliFactory');
 
 /**
  * Deactivates a DID.
@@ -43,14 +29,22 @@ exports.deactivate = function (body) {
 exports.register = function (body) {
     return new Promise(function (resolve, reject) {
         const { jobId: entryHash, options } = body;
+        const network = options.network || Networks.MAIN;
+        if (network !== Networks.MAIN || network !== Networks.TEST) {
+            reject(new InvalidNetworkParameterError(
+                "Unsupported network specified! Must be test or main"));
+            return;
+        }
+        const identityClient = FactomCliFactory.getFactomClient(network);
+
         if (entryHash) {
-            return _getChainId(entryHash)
+            return _getChainId(network, entryHash)
                 .then(async chainId => {
                     resolve({
                         jobId: entryHash,
                         didState: {
-                            state: await _getEntryStatus(entryHash, chainId),
-                            identifier: `did:factom:${chainId}`,
+                            state: await _getEntryStatus(network, entryHash, chainId),
+                            identifier: _didFromChainId(network, chainId),
                         }
                     });
                 })
@@ -76,12 +70,12 @@ exports.register = function (body) {
 
         identityClient.createIdentity(names,
             [keyToPublicIdentityKey(base58.decode(publicKeyBase58))],
-            process.env.ES_ADDRESS)
+            _getEsAddress(network))
             .then(async result => resolve({
                 jobId: result.entryHash,
                 didState: {
-                    identifier: `did:factom:${result.chainId}`,
-                    state: await _getEntryStatus(result.entryHash, result.chainId),
+                    identifier: _didFromChainId(network, result.chainId),
+                    state: await _getEntryStatus(network, result.entryHash, result.chainId),
                 }
             }))
             .catch(err => {
@@ -107,13 +101,22 @@ exports.update = function (body) {
     });
 }
 
-const _getEntryStatus = (entryHash, chainId) => {
-    return factomClient.factomdApi('ack', { hash: entryHash, chainid: chainId})
+const _getEntryStatus = (network, entryHash, chainId) => {
+    const factomClient = FactomCliFactory.getFactomClient(network);
+    return factomClient.factomdApi('ack', { hash: entryHash, chainid: chainId })
         .then(entryAckResponse => didStatusFromEntryAck(entryAckResponse));
 }
 
-const _getChainId = entryHash => {
+const _getChainId = (network, entryHash) => {
+    const factomClient = FactomCliFactory.getFactomClient(network);
     return factomClient.getEntry(entryHash)
         .then(response => response.chainId.toString('hex'));
 }
 
+const _didFromChainId = (network, chainId) => {
+    return network === Networks.TEST ? `did:factom:testnet:${chainId}` : `did:factom:${chainId}`;
+}
+
+const _getEsAddress = network => {
+    return network === Networks.TEST ? process.env.ES_TESTNET_ADDRESS : process.env.ES_ADDRESS;
+}
