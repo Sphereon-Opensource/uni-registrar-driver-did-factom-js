@@ -22,11 +22,13 @@ curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/js
 '{ "options": { \
     "publicKeyBase58": "6hUdTYK8pp3h1EwwJ4j8afsHHgJf8qDvdLrKbHPJkw6x", \
     "extIds": ["test", "external", "ids"] \
+    "network": "testnet" \
 }'
 ```
 The options are:
 * `publicKeyBase58` - **REQUIRED**: the public key to be associated with the DID
 * `extIds` - **OPTIONAL**: the unique external ids for the chain entry forming the basis of the DID. If none are provided, `[SHA256(publicKey)]` is used.
+* `network` - **OPTIONAL**: should be either `"testnet"` or `"mainnet"` and determines where the DID will be created. Default is `"mainnet"`.
 ## Build and Run (NodeJS)
 
 ```

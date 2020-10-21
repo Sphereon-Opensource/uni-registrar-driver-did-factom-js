@@ -17,8 +17,14 @@ class IdentityAlreadyExistsError extends InvalidRequestError {
     }
 }
 
+class InvalidNetworkParameterError extends InvalidRequestError {
+    constructor(message) {
+        super(message);
+    }
+}
 module.exports = {
     InvalidPublicKeyError,
     IdentityAlreadyExistsError,
-    InvalidRequestError
+    InvalidRequestError,
+    InvalidNetworkParameterError
 };
