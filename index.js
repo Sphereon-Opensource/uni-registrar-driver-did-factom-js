@@ -5,7 +5,7 @@ const path = require('path');
 const http = require('http');
 
 const oas3Tools = require('oas3-tools');
-const serverPort = 9080;
+const serverPort = 9081;
 
 // swaggerRouter configuration
 const options = {
