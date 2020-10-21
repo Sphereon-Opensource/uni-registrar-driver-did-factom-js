@@ -22,7 +22,7 @@ curl -X POST http://localhost:9080/1.0/register -H "Content-Type: application/js
 '{ "options": { \
     "publicKeyBase58": "6hUdTYK8pp3h1EwwJ4j8afsHHgJf8qDvdLrKbHPJkw6x", \
     "extIds": ["test", "external", "ids"] \
-    "network": "test" \
+    "network": "testnet" \
 }'
 ```
 The options are:
