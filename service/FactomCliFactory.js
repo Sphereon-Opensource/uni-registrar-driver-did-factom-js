@@ -3,8 +3,8 @@ const { FactomCli } = require('factom');
 const { InvalidNetworkParameterError } = require('./errors');
 
 const Networks = Object.freeze({
-    TESTNET: 'test',
-    MAINNET: 'main',
+    TESTNET: 'testnet',
+    MAINNET: 'mainnet',
 });
 
 const FactomCliRegistry = {};
