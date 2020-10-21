@@ -36,7 +36,7 @@ class FactomCliFactory {
                 return FactomCliRegistry.factomTestnetClient;
             default:
                 throw new InvalidNetworkParameterError(
-                    `Unsupported network specified! Must be test or main. Received: ${network}`);
+                    `Unsupported network specified! Must be testnet or mainnet. Received: ${network}`);
         }
     }
 
@@ -56,7 +56,7 @@ class FactomCliFactory {
                 return FactomCliRegistry.factomTestnetIdentityClient;
             default:
                 throw new InvalidNetworkParameterError(
-                    `Unsupported network specified! Must be test or main. Received: ${network}`);
+                    `Unsupported network specified! Must be testnet or mainnet. Received: ${network}`);
         }
     }
 }

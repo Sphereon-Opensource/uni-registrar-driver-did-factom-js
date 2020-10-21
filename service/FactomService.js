@@ -31,8 +31,8 @@ exports.register = function (body) {
         const { jobId: entryHash, options } = body;
         const network = options.network || Networks.MAINNET;
         if (network !== Networks.MAINNET && network !== Networks.TESTNET) {
-            reject(throw new InvalidNetworkParameterError(
-                `Unsupported network specified! Must be test or main. Received: ${network}`)
+            reject(new InvalidNetworkParameterError(
+                `Unsupported network specified! Must be testnet or mainnet. Received: ${network}`)
             );
             return;
         }
