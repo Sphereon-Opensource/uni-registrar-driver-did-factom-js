@@ -2,11 +2,15 @@
 
 # Universal Registrar Driver (NodeJS): factom
 
-This is a [Universal Registrar](https://github.com/decentralized-identity/universal-registrar/) driver for **did:factom** identifiers.
+This is a NodeJS [Universal Registrar](https://github.com/decentralized-identity/universal-registrar/) driver for **did:factom** identifiers supporting wrapped Factom Identity chains only. The full and official [Universal Registrar](https://github.com/decentralized-identity/universal-registrar/) Driver which is Java based is available at [Sphereon's OpenSource Github](https://github.com/Sphereon-Opensource/uni-registrar-driver-did-factom-java)
 
 ## Specifications
 
 * [Decentralized Identifiers](https://w3c.github.io/did-core/)
+* [Factom Decentralized Identifiers](https://github.com/factom-protocol/FIS/blob/master/FIS/DID.md), see note below!
+
+_Note:
+As mentioned this driver does not support the full Factom DID spec, it creates Factom Identity chains in the background, which are automatically wrapped by the official [Factom Universal Resolver Driver](https://github.com/Sphereon-Opensource/uni-resolver-driver-did-factom). If you need the full Factom DID support use our official [Universal Registrar Driver Java](https://github.com/Sphereon-Opensource/uni-registrar-driver-did-factom) or the [Factom Identity Client](https://github.com/Sphereon-Opensource/factom-identity-java)
 
 ## Build and Run (Docker)
 
